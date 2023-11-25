@@ -93,6 +93,18 @@ The major functionalities include:
                         existingRegistry.addContactToAddressBook(newContact);
                     }
                 }
+                case EDIT_EXISTING_CONTACT -> {
+                    AddressBook existingRegistry = getAddressFromAddressBook(addressBookArrayList , addressId);
+                    System.out.println("Enter the full name in a single line : ");
+                    input.nextLine();
+                    String fullName = input.nextLine();
+                    if(existingRegistry != null) {
+                        ContactPerson existingContact = existingRegistry.getContactDetail(fullName);
+                        if (existingContact != null) {
+                            existingRegistry.OptionsToEditContactDetails(existingContact);
+                        }
+                    }
+                }
                 default -> System.out.println("Choose the correct from the given option");
 
             }
