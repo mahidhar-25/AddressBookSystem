@@ -71,6 +71,10 @@ The major functionalities include:
 
         System.out.println("1.To initialize new address book");
         System.out.println("2.To add contact to the address book");
+        System.out.println("3.To edit contact in the address book");
+        System.out.println("4.To remove contact from the address book ");
+        System.out.println("5.To print the contact details ");
+        System.out.println("6.To print the address book");
         System.out.println("7.To exit");
 
         System.out.println("choose an option from the above every time : ");
@@ -112,6 +116,22 @@ The major functionalities include:
                     String fullName = input.nextLine();
                     if(existingRegistry != null) {
                         existingRegistry.removeContactFromAddressBookByName(fullName);
+                    }
+                }
+                case DISPLAY_ADDRESS_BOOK -> {
+                    AddressBook existingRegistry = getAddressFromAddressBook(addressBookArrayList , addressId);
+                    System.out.println("Address Book : \n" + existingRegistry);
+                }
+                case DISPLAY_CONTACT_DETAILS -> {
+                    AddressBook existingRegistry = getAddressFromAddressBook(addressBookArrayList , addressId);
+                    System.out.println("Enter the full name in a single line : ");
+                    input.nextLine();
+                    String fullName = input.nextLine();
+                    if(existingRegistry != null) {
+                        ContactPerson existingContact = existingRegistry.getContactDetail(fullName);
+                        if (existingContact != null) {
+                            System.out.println("Contact Details : \n" + existingContact);
+                        }
                     }
                 }
                 default -> System.out.println("Choose the correct from the given option");
