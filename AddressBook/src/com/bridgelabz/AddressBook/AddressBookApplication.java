@@ -105,6 +105,15 @@ The major functionalities include:
                         }
                     }
                 }
+                case REMOVE_EXISTING_CONTACT -> {
+                    AddressBook existingRegistry = getAddressFromAddressBook(addressBookArrayList , addressId);
+                    System.out.println("Enter the full name in a single line : ");
+                    input.nextLine();
+                    String fullName = input.nextLine();
+                    if(existingRegistry != null) {
+                        existingRegistry.removeContactFromAddressBookByName(fullName);
+                    }
+                }
                 default -> System.out.println("Choose the correct from the given option");
 
             }
