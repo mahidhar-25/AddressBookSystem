@@ -1,7 +1,6 @@
 package com.bridgelabz.AddressBook;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 
 /*
@@ -30,6 +29,57 @@ public class AddressBookApplication {
 
     public static final int EXIT_PROGRAM = 7;
 
+    // Create a Dictionary to store AddressBook objects with unique keys (addressId)
+    private static HashMap<String, AddressBook> addressBookDictionary = new HashMap<>();
+
+    // Method to check if the addressId is available in the Dictionary
+    /*
+     * @desc : Checks if the specified addressId is available in the AddressBook Dictionary.
+     *
+     * @param addressId The unique identifier for the AddressBook.
+     * @return true if the addressId is available, false otherwise.
+     */
+    public static boolean isAddressIdAvailable(String addressId) {
+        if(addressBookDictionary.isEmpty()){
+            return false;
+        }
+        return addressBookDictionary.containsKey(addressId);
+    }
+
+    // Method to insert an AddressBook into the Dictionary
+    /*
+
+     @desc : Inserts an AddressBook into the AddressBook Dictionary.
+     @param addressId The unique identifier for the AddressBook.
+     @param addressBook The AddressBook object to be inserted.
+     */
+    public static void insertAddressBook(String addressId, AddressBook addressBook) {
+        addressBookDictionary.put(addressId, addressBook);
+    }
+
+    // Method to get an AddressBook from the Dictionary
+    /*
+
+     @desc : Retrieves an AddressBook from the AddressBook Dictionary based on the specified addressId.
+     @param addressId The unique identifier for the AddressBook.
+     @return The AddressBook object associated with the provided addressId, or null if not found.
+     */
+    public static AddressBook getAddressBook(String addressId) {
+        return addressBookDictionary.get(addressId);
+    }
+
+    // Method to remove an AddressBook from the Dictionary
+    /*
+
+     @desc : Removes an AddressBook from the AddressBook Dictionary based on the specified addressId.
+     @param addressId The unique identifier for the AddressBook to be removed.
+     @return : no return
+     */
+    public static void removeAddressBook(String addressId) {
+        addressBookDictionary.remove(addressId);
+    }
+
+
 
     /*
 @desc: getAddressFromAddressBook, searches for an AddressBook object within an ArrayList<AddressBook> based on a provided addressId.
@@ -49,6 +99,25 @@ public class AddressBookApplication {
         }
         System.out.println("There is no book with " + addressId + " id");
         return null;
+    }
+
+    /*
+@desc: isAddressIdAvailable, searches for an AddressBook object within an ArrayList<AddressBook> based on a provided addressId.
+    If a match is found, the false is return. If no match is found,then return true.
+@param: addressBookArrayList (Type: ArrayList<AddressBook>): The list of address books to search through.
+    addressId (Type: String): The ID of the address book to be retrieved.
+@return:
+    Type: boolean - true / false.
+ */
+    public static boolean isAddressIdAvailable(ArrayList<AddressBook>addressBookArrayList , String addressId){
+        for(AddressBook book : addressBookArrayList){
+            if(book.getAddressBookId().equals(addressId)){
+                System.out.println("There is  book with " + addressId + " id");
+                return false;
+            }
+        }
+
+        return true;
     }
 
 
@@ -87,8 +156,15 @@ The major functionalities include:
             addressId = input.next();
             switch(option){
                 case CREATE_NEW_ADDRESS_BOOK -> {
+                    while(isAddressIdAvailable(addressId)){
+                        System.out.println("Enter new address id this is already taken");
+                        System.out.println("Enter new address id : ");
+                        addressId = input.next();
+                    }
                     AddressBook registery = new AddressBook(addressId);
                     addressBookArrayList.add(registery);
+                    insertAddressBook(addressId , registery);
+                    System.out.println("address book created");
                 }
                 case ADD_NEW_CONTACT -> {
                     AddressBook existingRegistry = getAddressFromAddressBook(addressBookArrayList , addressId);

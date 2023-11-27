@@ -222,10 +222,24 @@ public class ContactPerson {
         return id;
     }
 
-
-
-
-
-
+/*
+@desc : The method editContactDetails edits contact details
+       based on the provided key and new value using a switch statement.
+ @param : key: The key representing the contact detail to edit.
+          newValue: The new value to set for the specified contact detail
+  @return : no return
+ */
+    public void editContactDetails(String key, String newValue) {
+        switch (key){
+            case EDIT_FIRST_NAME -> setFirstName(newValue);
+            case EDIT_LAST_NAME -> setLastName(newValue );
+            case EDIT_ADDRESS -> setAddress(newValue);
+            case EDIT_CITY -> setCity(newValue);
+            case EDIT_PIN_CODE -> setPincode(newValue);
+            case EDIT_PHONE_NUMBER -> setPhoneNumber(newValue);
+            case EDIT_EMAIL -> setEmail(newValue);
+            default->System.out.println("choose proper key to edit");
+        }
+    }
 }
 
