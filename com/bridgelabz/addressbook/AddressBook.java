@@ -1,4 +1,4 @@
-package com.bridgelabz.AddressBook;
+package com.bridgelabz.addressbook;
 
 import java.util.ArrayList;
 import java.util.Scanner;

@@ -1,6 +1,4 @@
-package com.bridgelabz.AddressBook;
-
-import java.util.*;
+package com.bridgelabz.addressbook;
 
 
 /*
@@ -17,6 +15,10 @@ The major functionalities include:
         Displaying Address Book: Prints the contents of the specified address book.
         Displaying Contact Details: Prints the details of a specific contact within a specified address book.
  */
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
 
 public class AddressBookApplication {
 
@@ -91,7 +93,7 @@ public class AddressBookApplication {
         Type: AddressBook if a match is found.
         Type: null if no matching address book is found.
      */
-    public static AddressBook getAddressFromAddressBook(ArrayList<AddressBook>addressBookArrayList , String addressId){
+    public static AddressBook getAddressFromAddressBook(ArrayList<AddressBook> addressBookArrayList , String addressId){
         for(AddressBook book : addressBookArrayList){
             if(book.getAddressBookId().equals(addressId)){
                 return book;

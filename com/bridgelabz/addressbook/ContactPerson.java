@@ -1,4 +1,4 @@
-package com.bridgelabz.AddressBook;
+package com.bridgelabz.addressbook;
 /*
 @desc :
      this class is to create a behavior of a contact person , which has details like , name , address , city , pincode , email , phonhe number
