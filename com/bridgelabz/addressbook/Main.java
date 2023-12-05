@@ -25,8 +25,9 @@ public class Main {
     public static final int DISPLAY_CONTACT_DETAILS = 5;
     public static final int DISPLAY_ADDRESS_BOOK = 6;
     public static final int FILTER_CONTACTS_BY_CITY_NAME = 7;
+    public static final int GROUP_ALL_CONTACTS_BY_CITY_NAME = 8;
 
-    public static final int EXIT_PROGRAM = 6;
+    public static final int EXIT_PROGRAM = 9;
     public static void main(String[] args) {
         AddressBookApplication newAddressBooks = new AddressBookApplication();
 
@@ -37,7 +38,8 @@ public class Main {
         System.out.println("5.To print the contact details ");
         System.out.println("6.To print the address book");
         System.out.println("7.To print contacts filtered by city name");
-        System.out.println("8.To exit");
+        System.out.println("8.group all contacts by city name");
+        System.out.println("9.To exit");
 
         System.out.println("choose an option from the above every time : ");
         Scanner input = new Scanner(System.in);
@@ -117,7 +119,13 @@ public class Main {
                     String cityName = input.next();
                     ArrayList<ContactPerson> filteredContactByCity = newAddressBooks.getAllContactByCity(cityName);
                      System.out.println("filterd contacts are : " + filteredContactByCity);
+
                 }
+                case GROUP_ALL_CONTACTS_BY_CITY_NAME->{
+                    System.out.println();
+                    System.out.println("sorted by city name : " + newAddressBooks.getAllContactsByCityAndGroupThem());
+                }
+
                 default -> System.out.println("Choose the correct from the given option");
 
             }

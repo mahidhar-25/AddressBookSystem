@@ -17,6 +17,8 @@ The major functionalities include:
  */
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class AddressBookApplication {
@@ -121,7 +123,16 @@ public class AddressBookApplication {
         System.out.println("There is no book with " + addressId + " id");
         return null;
     }
-
+    /*
+@desc : finding all contacts using city name from all address books and group them into a dictionary
+@prams - no params
+@return - Map<String, List<ContactPerson>>
+ */
+    public Map<String, List<ContactPerson>> getAllContactsByCityAndGroupThem() {
+        return stackOfAddressBooks.stream()
+                .flatMap(addressBook -> addressBook.getContacts().stream())
+                .collect(Collectors.groupingBy(ContactPerson::getCity));
+    }
 /*
 @desc : finding all contacts using city name from all address books
 @prams - String - city name
