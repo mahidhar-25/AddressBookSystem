@@ -1,6 +1,8 @@
 package com.bridgelabz.addressbook;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 /*
 @desc: This Java program serves as an address book management system with a menu-driven interface.
@@ -123,7 +125,13 @@ public class Main {
                 }
                 case GROUP_ALL_CONTACTS_BY_CITY_NAME->{
                     System.out.println();
-                    System.out.println("sorted by city name : " + newAddressBooks.getAllContactsByCityAndGroupThem());
+                    Map<String , List<ContactPerson>> contactsGroupByCity =  newAddressBooks.getAllContactsByCityAndGroupThem();
+
+                    contactsGroupByCity.forEach((city, contactPersons) ->
+                            System.out.println("City: " + city + ", Contact Count: " + contactPersons.size())
+                    );
+
+                    System.out.println("sorted by city name : " + contactsGroupByCity);
                 }
 
                 default -> System.out.println("Choose the correct from the given option");
