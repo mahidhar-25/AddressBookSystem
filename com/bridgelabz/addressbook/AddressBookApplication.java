@@ -171,7 +171,16 @@ The major functionalities include:
                 case ADD_NEW_CONTACT -> {
                     AddressBook existingRegistry = getAddressFromAddressBook(addressBookArrayList , addressId);
                     if(existingRegistry != null) {
-                        ContactPerson newContact = AddressBook.getContactDetailsFromUser();
+                        boolean isValidContact;
+                        ContactPerson newContact;
+                        do {
+                            System.out.println("Enter Contact Details : ");
+                             newContact = AddressBook.getContactDetailsFromUser();
+                             isValidContact = existingRegistry.checkDuplicateContactByPersonName(newContact.getFullName());
+                             if(!isValidContact){
+                                 System.out.println("previous details has found a duplicate full name with our database please update it");
+                             }
+                        }while(!isValidContact);
                         existingRegistry.addContactToAddressBook(newContact);
                     }
                 }

@@ -2,6 +2,7 @@ package com.bridgelabz.addressbook;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /*
 @desc : The class AddressBook is used to store a group of contacts , each address book has a specific id , an array of contacts
@@ -37,8 +38,13 @@ public class AddressBook {
     @return : it just adds , won't return anything
      */
     public void addContactToAddressBook(ContactPerson user){
-        contacts.add(user);
-        System.out.println("contact has been added to Address Book");
+        if(checkDuplicateContactByPersonName(user.getFullName())){
+            contacts.add(user);
+            System.out.println("contact has been added to Address Book");
+        }else{
+            System.out.println("Theres Full name is already preset in our contact book");
+        }
+
     }
 
     /*
@@ -92,10 +98,10 @@ public class AddressBook {
         String firstName , lastName , address , city , pincode , phoneNumber , email , contactId;
         System.out.print("\nEnter contact id : ");
         contactId = inputContact.next();
-        System.out.print("\nEnter First name : ");
-        firstName = inputContact.next();
-        System.out.print("\nEnter Last name : ");
-        lastName = inputContact.next();
+            System.out.print("\nEnter First name : ");
+            firstName = inputContact.next();
+            System.out.print("\nEnter Last name : ");
+            lastName = inputContact.next();
         System.out.print("\nEnter address in single line: ");
         inputContact.nextLine();
         address = inputContact.nextLine();
@@ -176,6 +182,19 @@ public class AddressBook {
             choose = input.next();
         }
     }
+/*
+@desc : finding the duplicate contact in our address book by fuyll name as unique key
+@params : String - full name
+@return : boolean
+ */
+
+    public  boolean checkDuplicateContactByPersonName(String fullName){
+        int noOfPeopleMatched = (int) contacts.stream().
+                filter((contactPerson)->contactPerson.getFullName().equals(fullName)).count();
+        return noOfPeopleMatched==0;
+    }
+
+
 
     /*
        @desc: getContactDetail, is designed to return a contact from an address book based on the provided full name.
