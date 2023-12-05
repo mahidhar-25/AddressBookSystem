@@ -17,22 +17,16 @@ The major functionalities include:
  */
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class AddressBookApplication {
 
-    public static final int CREATE_NEW_ADDRESS_BOOK = 1;
-    public static final int ADD_NEW_CONTACT = 2;
-    public static final int EDIT_EXISTING_CONTACT = 3;
-    public static final int REMOVE_EXISTING_CONTACT = 4;
-    public static final int DISPLAY_CONTACT_DETAILS = 5;
-    public static final int DISPLAY_ADDRESS_BOOK = 6;
+  private ArrayList<AddressBook> stackOfAddressBooks;
 
-    public static final int EXIT_PROGRAM = 7;
+    public AddressBookApplication() {
+        stackOfAddressBooks = new ArrayList<>();
+    }
 
-    // Create a Dictionary to store AddressBook objects with unique keys (addressId)
-    private static HashMap<String, AddressBook> addressBookDictionary = new HashMap<>();
 
     // Method to check if the addressId is available in the Dictionary
     /*
@@ -41,11 +35,33 @@ public class AddressBookApplication {
      * @param addressId The unique identifier for the AddressBook.
      * @return true if the addressId is available, false otherwise.
      */
-    public static boolean isAddressIdAvailable(String addressId) {
-        if(addressBookDictionary.isEmpty()){
-            return false;
+/*
+@desc : finding the duplicate contact in our address book by fuyll name as unique key
+@params : String - full name
+@return : boolean
+ */
+
+    public  boolean checkDuplicateAddressByAddressId(String addressId){
+        if(stackOfAddressBooks.isEmpty()){
+            return true;
         }
-        return addressBookDictionary.containsKey(addressId);
+        int noOfPeopleMatched = (int) stackOfAddressBooks.stream().
+                filter((address)->address.getAddressBookId().equals(addressId)).count();
+        return noOfPeopleMatched==0;
+    }
+
+    public void addAddressToAddressBook(AddressBook address){
+        if(stackOfAddressBooks.isEmpty() || checkDuplicateAddressByAddressId(address.getAddressBookId())){
+            stackOfAddressBooks.add(address);
+            System.out.println("address has been added to Address Book");
+        }else{
+            System.out.println("Theres id is already preset in our address books");
+        }
+    }
+
+
+    public void removeAddressFromAddressBook(String addressId){
+           stackOfAddressBooks.removeIf(address -> address.getAddressBookId().equals(addressId));
     }
 
     // Method to insert an AddressBook into the Dictionary
@@ -55,8 +71,8 @@ public class AddressBookApplication {
      @param addressId The unique identifier for the AddressBook.
      @param addressBook The AddressBook object to be inserted.
      */
-    public static void insertAddressBook(String addressId, AddressBook addressBook) {
-        addressBookDictionary.put(addressId, addressBook);
+    public  void insertAddressBook(AddressBook addressBook) {
+        addAddressToAddressBook(addressBook);
     }
 
     // Method to get an AddressBook from the Dictionary
@@ -66,8 +82,11 @@ public class AddressBookApplication {
      @param addressId The unique identifier for the AddressBook.
      @return The AddressBook object associated with the provided addressId, or null if not found.
      */
-    public static AddressBook getAddressBook(String addressId) {
-        return addressBookDictionary.get(addressId);
+    public  AddressBook getAddressBook(String addressId) {
+       return stackOfAddressBooks.stream()
+                .filter(addressBook -> addressBook.getAddressBookId().equals(addressId))
+                .findFirst()
+                .orElse(null);
     }
 
     // Method to remove an AddressBook from the Dictionary
@@ -77,8 +96,8 @@ public class AddressBookApplication {
      @param addressId The unique identifier for the AddressBook to be removed.
      @return : no return
      */
-    public static void removeAddressBook(String addressId) {
-        addressBookDictionary.remove(addressId);
+    public  void removeAddressBook(String addressId) {
+        removeAddressFromAddressBook(addressId);
     }
 
 
@@ -103,6 +122,18 @@ public class AddressBookApplication {
         return null;
     }
 
+/*
+@desc : finding all contacts using city name from all address books
+@prams - String - city name
+@return - ArrayList<ContactPerson>
+ */
+    public ArrayList<ContactPerson> getAllContactByCity(String city){
+        return stackOfAddressBooks.stream()
+                .flatMap(addressBook -> addressBook.getContacts().stream())
+                .filter(contact -> contact.getCity().equals(city))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
     /*
 @desc: isAddressIdAvailable, searches for an AddressBook object within an ArrayList<AddressBook> based on a provided addressId.
     If a match is found, the false is return. If no match is found,then return true.
@@ -111,121 +142,11 @@ public class AddressBookApplication {
 @return:
     Type: boolean - true / false.
  */
-    public static boolean isAddressIdAvailable(ArrayList<AddressBook>addressBookArrayList , String addressId){
-        for(AddressBook book : addressBookArrayList){
-            if(book.getAddressBookId().equals(addressId)){
-                System.out.println("There is  book with " + addressId + " id");
-                return false;
-            }
-        }
-
-        return true;
+    public boolean isAddressIdAvailable(String addressId){
+        return stackOfAddressBooks.stream().anyMatch(address -> address.getAddressBookId().equals(addressId)); // Check if any address has the specified addressId
     }
 
 
-/*
-@desc: This Java program serves as an address book management system with a menu-driven interface.
-        The main method contains a loop that presents a menu of options to the user, including initializing a new address book,
-        adding, editing, and removing contacts, printing contact details and the address book, and exiting the program.
-        The program utilizes switch-case statements to handle different user choices.
 
-The major functionalities include:
-        Initializing New Address Book: Creates a new AddressBook and adds it to the list.
-        Adding New Contact: Retrieves an existing address book and adds a new contact using user input.
-        Editing Existing Contact: Edits details of an existing contact within a specified address book.
-        Removing Existing Contact: Removes a contact from the specified address book.
-        Displaying Address Book: Prints the contents of the specified address book.
-        Displaying Contact Details: Prints the details of a specific contact within a specified address book.
- */
 
-    public static void main(String[] args) {
-
-        System.out.println("1.To initialize new address book");
-        System.out.println("2.To add contact to the address book");
-        System.out.println("3.To edit contact in the address book");
-        System.out.println("4.To remove contact from the address book ");
-        System.out.println("5.To print the contact details ");
-        System.out.println("6.To print the address book");
-        System.out.println("7.To exit");
-
-        System.out.println("choose an option from the above every time : ");
-        Scanner input = new Scanner(System.in);
-        int option = input.nextInt();
-        String addressId;
-        ArrayList<AddressBook> addressBookArrayList = new ArrayList<>();
-        while(option != EXIT_PROGRAM){
-            System.out.println("Enter the id/username of address book : ");
-            addressId = input.next();
-            switch(option){
-                case CREATE_NEW_ADDRESS_BOOK -> {
-                    while(isAddressIdAvailable(addressId)){
-                        System.out.println("Enter new address id this is already taken");
-                        System.out.println("Enter new address id : ");
-                        addressId = input.next();
-                    }
-                    AddressBook registery = new AddressBook(addressId);
-                    addressBookArrayList.add(registery);
-                    insertAddressBook(addressId , registery);
-                    System.out.println("address book created");
-                }
-                case ADD_NEW_CONTACT -> {
-                    AddressBook existingRegistry = getAddressFromAddressBook(addressBookArrayList , addressId);
-                    if(existingRegistry != null) {
-                        boolean isValidContact;
-                        ContactPerson newContact;
-                        do {
-                            System.out.println("Enter Contact Details : ");
-                             newContact = AddressBook.getContactDetailsFromUser();
-                             isValidContact = existingRegistry.checkDuplicateContactByPersonName(newContact.getFullName());
-                             if(!isValidContact){
-                                 System.out.println("previous details has found a duplicate full name with our database please update it");
-                             }
-                        }while(!isValidContact);
-                        existingRegistry.addContactToAddressBook(newContact);
-                    }
-                }
-                case EDIT_EXISTING_CONTACT -> {
-                    AddressBook existingRegistry = getAddressFromAddressBook(addressBookArrayList , addressId);
-                    System.out.println("Enter the full name in a single line : ");
-                    input.nextLine();
-                    String fullName = input.nextLine();
-                    if(existingRegistry != null) {
-                        ContactPerson existingContact = existingRegistry.getContactDetail(fullName);
-                        if (existingContact != null) {
-                            existingRegistry.OptionsToEditContactDetails(existingContact);
-                        }
-                    }
-                }
-                case REMOVE_EXISTING_CONTACT -> {
-                    AddressBook existingRegistry = getAddressFromAddressBook(addressBookArrayList , addressId);
-                    System.out.println("Enter the full name in a single line : ");
-                    input.nextLine();
-                    String fullName = input.nextLine();
-                    if(existingRegistry != null) {
-                        existingRegistry.removeContactFromAddressBookByName(fullName);
-                    }
-                }
-                case DISPLAY_ADDRESS_BOOK -> {
-                    AddressBook existingRegistry = getAddressFromAddressBook(addressBookArrayList , addressId);
-                    System.out.println("Address Book : \n" + existingRegistry);
-                }
-                case DISPLAY_CONTACT_DETAILS -> {
-                    AddressBook existingRegistry = getAddressFromAddressBook(addressBookArrayList , addressId);
-                    System.out.println("Enter the full name in a single line : ");
-                    input.nextLine();
-                    String fullName = input.nextLine();
-                    if(existingRegistry != null) {
-                        ContactPerson existingContact = existingRegistry.getContactDetail(fullName);
-                        if (existingContact != null) {
-                            System.out.println("Contact Details : \n" + existingContact);
-                        }
-                    }
-                }
-                default -> System.out.println("Choose the correct from the given option");
-
-            }
-            System.out.println("choose an option from the above every time : ");
-            option = input.nextInt();
-        }
-    }
 }

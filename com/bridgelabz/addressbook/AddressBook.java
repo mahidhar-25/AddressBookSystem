@@ -2,7 +2,6 @@ package com.bridgelabz.addressbook;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 /*
 @desc : The class AddressBook is used to store a group of contacts , each address book has a specific id , an array of contacts
@@ -13,11 +12,15 @@ public class AddressBook {
     public String addressBookId;
     ArrayList<ContactPerson> contacts;
 
+    public ArrayList<ContactPerson> getContacts() {
+        return contacts;
+    }
+
     /*
-    @desc : it returns the unique id of the address book
-    @params : no params
-    @return : returns an addressbookid in string format
-     */
+        @desc : it returns the unique id of the address book
+        @params : no params
+        @return : returns an addressbookid in string format
+         */
     public String getAddressBookId() {
         return addressBookId;
     }
